@@ -4,7 +4,8 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    tags:
+      - 'v*'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,6 +21,8 @@ permissions:
 concurrency:
   group: "pages"
   cancel-in-progress: false
+env:
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   # Single deploy job since we're just deploying
@@ -31,22 +34,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 'latest'
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'pnpm'
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          target: 'wasm32-wasip2'
-          override: true
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Download wkg binary from GitHub Releases
+        run: |
+          if [ ! -f /usr/local/bin/wkg ]; then
+            gh release download v0.11.0 -R bytecodealliance/wasm-pkg-tools -p 'wkg-x86_64-unknown-linux-gnu'
+            chmod +x wkg-x86_64-unknown-linux-gnu
+            sudo mv wkg-x86_64-unknown-linux-gnu /usr/local/bin/wkg
+          fi
+      - name: Create WKG config if not provided
+        if: env.WKG_CONFIG_FILE == ''
+        run: |
+          export WKG_CONFIG_FILE=$(mktemp)
+          echo "[registry.\"wa.dev\".warg]" > "$WKG_CONFIG_FILE"
+          echo "auth_token = \"${WARG_AUTH_TOKEN}\"" >> "$WKG_CONFIG_FILE"
+          echo "WKG_CONFIG_FILE=$WKG_CONFIG_FILE" >> $GITHUB_ENV
+        env:
+          WARG_AUTH_TOKEN: ${{ secrets.WARG_AUTH_TOKEN }}        
+
       - name: Install dependencies
         run: pnpm install
+      - name: Strip 'v' prefix from tag
+        run: echo "WKG_VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
       - name: Build with Vite
-        run: pnpm run build
+        run: pnpm run dist
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
