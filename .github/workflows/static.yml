@@ -62,8 +62,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-      - name: Strip 'v' prefix from tag
-        run: echo "WKG_VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
 
       - name: Build with Vite
         run: pnpm run dist
