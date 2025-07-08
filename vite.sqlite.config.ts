@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import * as path from 'node:path';
 
 export default defineConfig({
     base: '/parser-playground/sqlite',
@@ -8,5 +9,10 @@ export default defineConfig({
     },
     esbuild: {
         target: 'esnext',
+    },
+    resolve: {
+        alias: {
+        parser: path.resolve(__dirname, './pkg/sqlite/parser.js'),
+        },
     },
 });

@@ -1,5 +1,5 @@
 import { EditorState } from '@codemirror/state';
-import * as parser from '../pkg/parser/parser'
+import * as parser from 'parser'
 import { EditorView, placeholder } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { onAfterInput, trackAfterInput, type AfterInputMetadataSpec } from './codemirror-after-input';
