@@ -4,13 +4,14 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "preview": "vite preview",
     "dist:get": "dotenv -- sh ./scripts/wkg-get.sh",
     "dist:transpile": "dotenv -- sh ./scripts/wkg-transpile.sh",
+    "preview:sqlite": "vite preview --config vite.sqlite.config.ts",
+    "dev:sqlite": "vite --config vite.sqlite.config.ts",
     "build:sqlite": "tsc && vite build --config vite.sqlite.config.ts",
     "dist:sqlite": "pnpm run dist:get && pnpm run dist:transpile && pnpm run build:sqlite",
-    "dist": "pnpm run dist:sqlite"
+    "build": "pnpm run build:sqlite",
+    "dist": "pnpm run dist:get && pnpm run dist:transpile && pnpm run build"
   },
   "devDependencies": {
     "@bytecodealliance/jco": "^1.11.2",
