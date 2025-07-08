@@ -2,6 +2,8 @@
 
 set -eu
 
-PARSER='ritalin:sqlite-parser@0.1.0'
+PACKAGE='ritalin:sqlite-parser@0.1.0'
+PARSER='pkg/sqlite-parser.wasm'
 
-pnpm exec wkg get --registry wa.dev --overwrite ${PARSER}
+mkdir -p pkg
+pnpm exec wkg get --registry wa.dev --overwrite --output ${PARSER} ${PACKAGE}

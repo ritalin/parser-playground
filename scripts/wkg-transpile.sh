@@ -1,3 +1,6 @@
 #!/bin/sh
 set -eu
-pnpm exec jco transpile ritalin_sqlite-parser@${WKG_VERSION}.wasm -o pkg/parser --name parser --no-nodejs-compat
+
+PARSER='ritalin:sqlite-parser@0.1.0'
+
+pnpm exec jco transpile pkg/sqlite-parser.wasm -o pkg/sqlite --name parser --no-nodejs-compat
