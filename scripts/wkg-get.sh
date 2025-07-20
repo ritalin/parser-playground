@@ -2,7 +2,7 @@
 
 set -eu
 
-PACKAGE='ritalin:sqlite-parser@0.1.0'
+PACKAGE='ritalin:sqlite-parser@0.3.1'
 PARSER='pkg/sqlite-parser.wasm'
 
 mkdir -p pkg

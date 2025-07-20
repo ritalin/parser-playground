@@ -31,7 +31,7 @@ body {
 h1 {
   font-size: 3em;
   line-height: 1.1;
-  padding-left: 0.5em;
+  padding-left: 24px;
 }
 
 #app {
@@ -50,8 +50,36 @@ header {
   display: flex;
   background: #333;
   color: white;
-  margin-right: 4px;
   justify-content: space-between;
+}
+
+.title-block {
+  flex-direction: column;
+  margin: 16px 4px 4px 0;
+}
+
+.title-block h1 {
+  margin: 0;
+}
+
+.versions {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  padding-left: 24px;
+}
+
+.versions p {
+  display: inline;
+  position: relative;
+  margin: 0;
+  padding-right: 0.5em;
+}
+
+.versions p:not(:last-child)::after {
+  content: "/";
+  position: absolute;
+  right: 0;
 }
 
 .container {
