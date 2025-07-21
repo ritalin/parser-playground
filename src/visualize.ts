@@ -15,6 +15,9 @@ export function initialize(element: HTMLDivElement) {
     const fullParseTime = element.querySelector<HTMLElement>('#full-parse-time')!;
     const incParseTime = element.querySelector<HTMLElement>('#incremental-parse-time')!;
 
+    element.querySelector<HTMLElement>('.version')!.textContent = parser.parsers.version();
+    element.querySelector<HTMLElement>('.api-version')!.textContent = p.apiVersion();
+
     const lightTheme = EditorView.theme({
       "&": {
         backgroundColor: "white",
@@ -30,6 +33,7 @@ export function initialize(element: HTMLDivElement) {
         basicSetup,
         lightTheme,
         placeholder("ここにSQLを入力"),
+        EditorState.allowMultipleSelections.of(true),
         trackAfterInput(),
         onAfterInput(handleEditorUpdate(result, fullParseTime, incParseTime))
       ]
@@ -64,11 +68,11 @@ function handleEditorUpdate(result: HTMLTextAreaElement, fullParseTime: HTMLElem
           return {
             startOffset: md.from,
             oldLen: md.oldLen,
-            newLen: md.newLen
+            text: md.inserted,
           }
         })
 
-        tree = p.incremental(tree, scopes).parse(source);
+        tree = p.parseIncremental(tree, scopes);
         incParseTime.textContent = `${performance.now() - startTime}msec`
     }
 
