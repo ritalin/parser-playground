@@ -33,6 +33,7 @@ export function initialize(element: HTMLDivElement) {
         basicSetup,
         lightTheme,
         placeholder("ここにSQLを入力"),
+        EditorState.allowMultipleSelections.of(true),
         trackAfterInput(),
         onAfterInput(handleEditorUpdate(result, fullParseTime, incParseTime))
       ]
@@ -67,7 +68,6 @@ function handleEditorUpdate(result: HTMLTextAreaElement, fullParseTime: HTMLElem
           return {
             startOffset: md.from,
             oldLen: md.oldLen,
-            newLen: md.newLen,
             text: md.inserted,
           }
         })
