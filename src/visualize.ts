@@ -46,14 +46,8 @@ export function initialize(element: HTMLDivElement) {
 }
 
 function handleEditorUpdate(result: HTMLTextAreaElement, fullParseTime: HTMLElement, incParseTime: HTMLElement) {
-  return (event: string, source: string, metadata: AfterInputMetadataSpec[]) => {
+  return (_event: string, source: string, metadata: AfterInputMetadataSpec[]) => {
     const startTime = performance.now();
-
-    if (event.startsWith("move:after")) {
-      // FIXME: Currently, the `move` event is consists of 2 actions; CUT & PASTE.
-      // This need multi-scope edits. so it handles as full parse.
-      tree = null;
-    }
 
     if (tree === null) {
         console.log("[FULL]");
